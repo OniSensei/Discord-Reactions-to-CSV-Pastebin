@@ -81,22 +81,43 @@ Module Program
                                     reactionList.Add(reactions)
                                 End If
 
-                                Dim emoteReact As Emoji
+                                Dim emoteReact As Emote
+                                Dim emojiReact As Emoji
                                 Dim csv As String = "Emote,Discord UserID,Discord Username" ' Build the CSV file data as a Comma separated string.
                                 csv += vbCr & vbLf ' Add line
                                 For Each rl As String In reactionList
-                                    emoteReact = rl
-                                    Dim reactionusers = Await messages(i).GetReactionUsersAsync(emoteReact, 1000).FlattenAsync ' Gets the list of users that have reacted with this emote
-                                    For r As Integer = 0 To reactionusers.Count - 1 ' Loop through reaction users and add a row to csv
-                                        csv += rl & "," & reactionusers(r).Id & "," & reactionusers(r).Username & "#" & reactionusers(r).Discriminator ' Add values
-                                        csv += vbCr & vbLf ' Add line
-                                    Next
+                                    If rl.Contains("<") AndAlso rl.Contains(">") Then ' Custom emote found
+                                        emoteReact = Emote.Parse(rl)
+                                        Dim reactionusers = Await messages(i).GetReactionUsersAsync(emoteReact, 1000).FlattenAsync ' Gets the list of users that have reacted with this emote
+                                        For r As Integer = 0 To reactionusers.Count - 1 ' Loop through reaction users and add a row to csv
+                                            csv += rl & "," & reactionusers(r).Id & "," & reactionusers(r).Username & "#" & reactionusers(r).Discriminator ' Add values
+                                            csv += vbCr & vbLf ' Add line
+                                        Next
+                                    Else
+                                        emojiReact = rl
+                                        Dim reactionusers = Await messages(i).GetReactionUsersAsync(emojiReact, 1000).FlattenAsync ' Gets the list of users that have reacted with this emote
+                                        For r As Integer = 0 To reactionusers.Count - 1 ' Loop through reaction users and add a row to csv
+                                            csv += rl & "," & reactionusers(r).Id & "," & reactionusers(r).Username & "#" & reactionusers(r).Discriminator ' Add values
+                                            csv += vbCr & vbLf ' Add line
+                                        Next
+                                    End If
                                 Next
 
                                 ' Export to pastebin
                                 Pastebin.DevKey = GetDevKey()
+                                Dim pasteVisibility As String = GetPasteBinVisibility()
                                 Dim pasteUser As User = Await Pastebin.LoginAsync(GetPasteBinUsername(), GetPasteBinPassword())
-                                Dim newPaste As Paste = Await pasteUser.CreatePasteAsync(csv, msgID & " Export", Language.INIfile, Visibility.Public, Expiration.OneMonth)
+                                Dim newPaste As Paste
+                                Select Case pasteVisibility
+                                    Case "Private"
+                                        newPaste = Await pasteUser.CreatePasteAsync(csv, msgID & " Export", Language.INIfile, Visibility.Private, Expiration.OneMonth)
+                                    Case "Public"
+                                        newPaste = Await pasteUser.CreatePasteAsync(csv, msgID & " Export", Language.INIfile, Visibility.Public, Expiration.OneMonth)
+                                    Case "Unlisted"
+                                        newPaste = Await pasteUser.CreatePasteAsync(csv, msgID & " Export", Language.INIfile, Visibility.Unlisted, Expiration.OneMonth)
+                                    Case Else
+                                        newPaste = Await pasteUser.CreatePasteAsync(csv, msgID & " Export", Language.INIfile, Visibility.Unlisted, Expiration.OneMonth)
+                                End Select
 
                                 Dim builder As EmbedBuilder = New EmbedBuilder
                                 builder.WithAuthor(GetBotName(), GetBotIcon())

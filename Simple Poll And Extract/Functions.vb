@@ -42,4 +42,9 @@ Module Functions
         Dim pass As String = settingsFile.Configs("PASTEBIN").Get("Password")
         Return pass
     End Function
+
+    Public Function GetPasteBinVisibility() As String
+        Dim vis As String = settingsFile.Configs("PASTEBIN").Get("Visibility")
+        Return vis
+    End Function
 End Module
