@@ -55,7 +55,7 @@ pe!export [message ID] <- replace messageID with the ID of the message you want 
    - Make sure your discord desktop client is running *(this does not work with discord on webclients like chrome etc)*
    
    - Download the latest version of the bot
-      - > https://github.com/OniSensei/Discord-Reactions-to-CSV-Pastebin/releases/download/Release/Export.Reactions.rar
+      - > [v0.1](https://github.com/OniSensei/Discord-Reactions-to-CSV-Pastebin/releases/download/v0.1/Export.Reactions.rar)
     
    - Extract the zip to the desktop or my documents, somewhere you can find it easily.
    
