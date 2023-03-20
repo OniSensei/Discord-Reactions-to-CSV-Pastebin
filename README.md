@@ -66,12 +66,13 @@ Token = ""
 Name = "Poll & Export"
 IconURL = "https://imgur.com/yg0HFY3.png"
 Prefix = "pe!"
-Reactions = ":confetti_ball:,:tada:"
+Reactions = ":confetti_ball:,:tada:,<:shiny:731667030985408603>"
 [PASTEBIN]
 DevKey = ""
 Username = ""
 Password = ""
+Visibility = "Public"
 ```
-   - Edit the settings with the token we copied in the steps above. Change the name, iconURL, prefix, or add reactions to the list seperated by a comma as you please. Under the 'PASTEBIN' section you will need a devkey and your login information. You can get this from https://pastebin.com/doc_api#1 (you will need to be logged in to get the devkey)
+   - Edit the settings with the token we copied in the steps above. Change the name, iconURL, prefix, or add reactions to the list seperated by a comma as you please. Under the 'PASTEBIN' section you will need a devkey and your login information. You can get this from https://pastebin.com/doc_api#1 (you will need to be logged in to get the devkey). Custom emote reactions require the full code of the emote which can be found by sending the emote with a back slash before it, ex: \:shiny: which will output something similar to <:shiny:731667030985408603>.
 
    - Once your settings.ini file is saved, you can start 'Simple Poll And Extract.exe'
