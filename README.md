@@ -8,7 +8,7 @@ pe! <- Prefix (customizable in the settings.ini file)
 
 Command: (you must NOT include the "[]" brackets.)
 
-pe!export [message ID] <- replace messageID with the ID of the message you want to export to CSV.
+pe!export [channel ID],[message ID] <- replace channel ID & message ID with the respective ID's for what you want to export to CSV - Include the comma, channel always first, message second.
 	- This command exports all usernames / user ID that have reacted with an emote listed in the settings.ini file.
 ```
 
