@@ -59,6 +59,8 @@ Module Program
 
     Private Async Function MessageReceivedAsync(ByVal message As SocketMessage) As Task
         Dim author As SocketGuildUser = message.Author ' Assigns the socket guild user to a variable
+        Dim chn As SocketGuildChannel = message.Channel
+        Dim guild As IGuild = chn.Guild
 
         If author.IsBot = False Then ' Checks if the message is from a user
             Dim prefix As String = GetBotPrefix() ' Gets prefix from settings file
@@ -66,8 +68,10 @@ Module Program
             If message.Content.StartsWith(prefix) Then ' Checks if the message is a command
                 If message.Content.StartsWith(prefix & "export") Then ' Checks if the command is rte!export
                     Try
-                        Dim msgID As String = message.Content.Replace(prefix & "export ", "") ' Gets just the message ID
-                        Dim messages = Await message.Channel.GetMessagesAsync(1000).FlattenAsync() ' Gets cache of the last 1000 messages
+                        Dim cmdParams As String() = message.Content.Replace(prefix & "export ", "").Split(",")
+                        Dim msgID As String = cmdParams(1) ' Gets message ID
+                        Dim channelID As String = cmdParams(0) ' Gets channel ID
+                        Dim messages = Await _client.GetGuild(guild.Id).GetTextChannel(channelID).GetMessagesAsync(1000).FlattenAsync() ' Gets cache of the last 1000 messages
                         For i As Integer = 0 To messages.Count - 1 ' Loops through cache
                             If messages(i).Id = msgID Then ' If the message searched is found we execute export
                                 Dim reactions As String = GetReactionList()
